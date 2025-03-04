@@ -1,15 +1,15 @@
 const express = require("express");
 const userController = require("../controller/user.controller");
-const authorizeUser = require("../middleware/authorize_user");
-
+const authenticateUser = require("../middleware/authenticate_user");
+const isAdmin = require("../middleware/is_admin");
 const userRouter = express.Router();
 
 userRouter
   .route("/")
-  .get(authorizeUser, userController.getAllUsers)
-  .post(userController.createUser)
-  .put(userController.updateUser)
-  .delete(userController.deleteUser);
+  .get(authenticateUser, isAdmin, userController.getAllUsers)
+  .post(authenticateUser, isAdmin, userController.createUser)
+  .put(authenticateUser, isAdmin, userController.updateUser)
+  .delete(authenticateUser, isAdmin, userController.deleteUser);
 
 userRouter.route("/login").post(userController.login);
 

@@ -1,7 +1,7 @@
 const authorizeRole = function (role) {
   return (req, res, next) => {
 
-    if (condition) {
+    if (req.user.role) {
         
     }
     next();

@@ -2,7 +2,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../model/user.model");
 
-const authorizeUser = async function (req, res, next) {
+const authenticateUser = async function (req, res, next) {
   const authHeader = req.headers;
 
   const token = authHeader && authHeader?.authorization?.split(" ")[1];
@@ -19,13 +19,15 @@ const authorizeUser = async function (req, res, next) {
   }
 
   const authorizedUser = await User.findById(verifiedResult.userId);
+  console.log(authorizedUser);
 
-  const isUserAuthorized = authorizedUser && authorizedUser.role == "admin";
-
-  if (isUserAuthorized === false) {
-    return res.status(401).json({ message: "Unauthorized user" });
+  if (!authorizedUser) {
+    return res.status(401).json({ message: "User not found" });
   }
+
+  req.user = authorizedUser; // setting user object in request object
+
   next();
 };
 
-module.exports = authorizeUser;
+module.exports = authenticateUser;
