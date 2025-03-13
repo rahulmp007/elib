@@ -6,10 +6,15 @@ const authorSchema = mongoose.Schema(
       required: true,
       type: String,
     },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+    },
     nationality: {
       type: String,
     },
-    
+
     dob: {
       type: Date,
     },

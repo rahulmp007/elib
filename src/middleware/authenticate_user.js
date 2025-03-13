@@ -19,7 +19,6 @@ const authenticateUser = async function (req, res, next) {
   }
 
   const authorizedUser = await User.findById(verifiedResult.userId);
-  console.log(authorizedUser);
 
   if (!authorizedUser) {
     return res.status(401).json({ message: "User not found" });

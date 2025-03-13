@@ -11,8 +11,6 @@ class UserRepository {
       return await User.find({}).select("-password");
     } catch (error) {
       if (error instanceof ApiError) {
-        console.log("code", error);
-
         throw error;
       } else {
         throw handleDbError(error);
@@ -32,8 +30,6 @@ class UserRepository {
       return await newUser.save();
     } catch (error) {
       if (error instanceof ApiError) {
-        console.log("code", error);
-
         throw error;
       } else {
         throw handleDbError(error);
@@ -54,8 +50,6 @@ class UserRepository {
       // can also use REPLACEONE which reutrn current updated document
     } catch (error) {
       if (error instanceof ApiError) {
-        console.log("code", error);
-
         throw error;
       } else {
         throw handleDbError(error);
@@ -72,8 +66,6 @@ class UserRepository {
       return await User.deleteOne({ email });
     } catch (error) {
       if (error instanceof ApiError) {
-        console.log("code", error);
-
         throw error;
       } else {
         throw handleDbError(error);
@@ -84,7 +76,8 @@ class UserRepository {
   async findUser(userInfo) {
     try {
       const { email, password } = userInfo;
-      const existingUser = await User.findOne({ email });
+      const existingUser = await User.findOne({ email }).select('-borrowed')
+      // .populate("borrowed.bookId");
       if (!existingUser) {
         throw new ApiError("No such user exists", 404);
       }
@@ -101,8 +94,6 @@ class UserRepository {
       return { token: token, data: { ...existingUser._doc } };
     } catch (error) {
       if (error instanceof ApiError) {
-        console.log("code", error);
-
         throw error;
       } else {
         throw handleDbError(error);
